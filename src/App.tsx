@@ -13,7 +13,7 @@ function App() {
       >
         Get jsonplaceholder todo num
       </button>
-      {url ? (
+      {
         <GenericFetchData
           setData={(_todos: any[]) => setTodos(_todos)}
           url={url}
@@ -36,9 +36,7 @@ function App() {
             </Alert>
           }
         />
-      ) : (
-        ""
-      )}
+      }
 
       <p>num todos : {todos ? todos.length : "..."}</p>
     </div>

@@ -18,12 +18,19 @@ function GenericFetchData<DataType>(props: IFetchData<DataType>) {
     }
   }, [data]);
 
+  // ---- order is important !!!!
+  
   if (isLoading) {
     return loadingComponent;
   }
 
   if (error) {
     return errorComponent;
+  }
+
+  if (!data) {
+    // --- not ready
+    return <></>;
   }
 
   return successComponent;
