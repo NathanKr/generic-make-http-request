@@ -26,7 +26,6 @@ interface IFetchData<DataType> {
 <h2>using the generic fetch data component</h2>
 
 ```ts
-url ? (
         <GenericFetchData
           setData={(_todos: any[]) => setTodos(_todos)}
           url={url}
@@ -62,7 +61,3 @@ this GenericFetchData component is generic in the sense that you can
 <li>use any success component</li>
 </ul>
 
-<h2>Open issues</h2>
-<ul>
-<li>currently i need to use url && <GenericFetchData ...> otherwise it is not working. can i do without it ?</li>
-</ul>
