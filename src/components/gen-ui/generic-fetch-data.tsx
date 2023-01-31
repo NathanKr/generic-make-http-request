@@ -16,7 +16,7 @@ function GenericFetchData<DataType>(props: IFetchData<DataType>) {
     if (data) {
       setData(data);
     }
-  }, [data]);
+  }, [data , setData]);
 
   // ---- order is important !!!!
   
