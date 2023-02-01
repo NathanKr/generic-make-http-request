@@ -2,6 +2,11 @@
 <p>useFetchData is a custom hook that can fetch data via GET method and validate it. It return [data, isLoading, error]</p>
 <p>given isLoading we might want to show progress .Given error we might want to show error .So why not do a component for this ? - thats the purpose of this repository</p>
 
+<h2>Declerative design</h2>
+What is nice about this design is that it embrace the declerative concept , which is one of react foundations
+
+![Declerative](./figs/declerative.png)
+
 <h2>Design</h2>
 The design is composed of three layers
 <ul>
