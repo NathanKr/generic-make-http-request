@@ -1,5 +1,5 @@
 <h2>Motivation</h2>
-<p>useFetchData is a custom hook that can fetch data via GET method and validate it. It return [data, isLoading, error]</p>
+<p>useFetchData is a custom hook that can fetch data via GET method and validate it. It return {data, isLoading, error}</p>
 <p>given isLoading we might want to show progress .Given error we might want to show error .So why not do a component for this ? - thats the purpose of this repository</p>
 
 <h2>Declerative design</h2>
@@ -12,7 +12,7 @@ The design is composed of three layers
 <ul>
 <li>IFetchData<DataType> - typescript interface generic</li>
 <li>useFetchData<DataType> - custom hooks to fetch the data and validate it</li>
-<li>GenericFetchData<DataType>(props: IFetchData<DataType>) - generic component to show : error \ success \ loading and set data to parent callback function. This component is fetching data when its url argument is set to its correct value<li>
+<li>GenericFetchData<DataType>(props: IFetchData<DataType>) - generic component to show : error \ success \ loading and set data to parent callback function. This component is fetching data when its url argument is set to its correct value</li>
 </ul>
 
 <h2>IFetchData</h2>
