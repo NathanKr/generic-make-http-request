@@ -3,9 +3,10 @@ import { useEffect, useState } from "react";
 import IValidationResult from "../types/i-validation-results";
 import { MainErrors } from "../types/main-errors";
 
-export default function useFetchData<DataType>(
+export default function useFetchData<DataType, QueryParamsType>(
   url: string,
-  validate: ((data: DataType) => IValidationResult) | null
+  validate: ((data: DataType) => IValidationResult) | null,
+  params : QueryParamsType | null
 ): {
   data: DataType | undefined;
   isLoading: boolean;
@@ -21,7 +22,7 @@ export default function useFetchData<DataType>(
       // --- if '' i get an error so added this
       setIsLoading(true);
       axios
-        .get(url)
+        .get(url, { params })
         .then((res: AxiosResponse) => {
           setData(res.data);
           setIsLoading(false);
