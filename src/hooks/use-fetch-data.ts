@@ -6,11 +6,15 @@ import { MainErrors } from "../types/main-errors";
 export default function useFetchData<DataType>(
   url: string,
   validate: ((data: DataType) => IValidationResult) | null
-): [DataType | undefined, boolean, MainErrors | null] {
+): {
+  data: DataType | undefined;
+  isLoading: boolean;
+  error: MainErrors | null;
+} {
   const [data, setData] = useState<DataType>();
   const [error, setError] = useState<MainErrors | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  useEffect(getData, [url , validate]);
+  useEffect(getData, [url, validate]);
 
   function getData() {
     if (url) {
@@ -37,5 +41,5 @@ export default function useFetchData<DataType>(
     }
   }
 
-  return [data, isLoading, error];
+  return { data, isLoading, error };
 }

@@ -11,15 +11,15 @@ function GenericFetchData<DataType>(props: IFetchData<DataType>) {
     loadingComponent,
     errorComponent,
   } = props;
-  const [data, isLoading, error] = useFetchData<DataType>(url, validate);
+  const { data, isLoading, error } = useFetchData<DataType>(url, validate);
   useEffect(() => {
     if (data) {
       setData(data);
     }
-  }, [data , setData]);
+  }, [data, setData]);
 
   // ---- order is important !!!!
-  
+
   if (isLoading) {
     return loadingComponent;
   }
