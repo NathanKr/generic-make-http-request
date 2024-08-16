@@ -12,7 +12,7 @@ The design is composed of three layers
 <ul>
 <li>IFetchData<DataType, QueryParamsType> - typescript interface generic</li>
 <li>useFetchData<DataType, QueryParamsType> - custom hooks to fetch the data and validate it</li>
-<li>GenericFetchData<DataType, QueryParamsType>(props: IFetchData<DataType>) - generic component to show : error \ success \ loading and set data to parent callback function. This component is fetching data when its url argument is set to its correct value</li>
+<li>GenericFetchData<DataType, QueryParamsType>(props: IFetchData<DataType>) - generic component to show : error \ success \ loading and set data to parent callback function. This component is fetching data when its url argument is set to its correct value. It uses useMemo so will render only when its arguments changes</li>
 </ul>
 
 <h2>IFetchData</h2>
