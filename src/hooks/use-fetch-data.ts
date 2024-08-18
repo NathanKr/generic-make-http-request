@@ -20,6 +20,8 @@ export default function useFetchData<DataType, QueryParamsType>(
   function getData() {
     if (url) {
       // --- if '' i get an error so added this
+      console.log('fetching in useFetchData ...');
+      
       setIsLoading(true);
       axios
         .get(url, { params })

@@ -1,4 +1,4 @@
-import { memo, useEffect } from "react";
+import { useEffect } from "react";
 import useFetchData from "../../hooks/use-fetch-data";
 import IFetchData from "../../types/i-fetch-data";
 
@@ -43,8 +43,4 @@ function GenericFetchData<DataType, QueryParamsType>(
   return successComponent;
 }
 
-/* ---  use memo because i do not want to access the server only because the parent 
-        has render and cause this component to render and re fetch from server
-*/
-
-export default memo(GenericFetchData); 
+export default GenericFetchData
