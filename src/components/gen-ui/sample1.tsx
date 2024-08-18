@@ -6,6 +6,9 @@ function Sample1() {
   const [urlTodos, setUrlTodos] = useState("");
   const [todos, setTodos] = useState<any[]>([]);
 
+  console.log('Sample1 rendered');
+  
+
   return (
     <div>
       <button

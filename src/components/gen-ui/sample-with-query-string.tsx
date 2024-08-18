@@ -6,6 +6,9 @@ function SampleWithQueryString() {
   const [urlComments, setUrlComments] = useState("");
   const [comments, setComments] = useState<any[]>([]);
 
+  console.log('SampleWithQueryString rendered');
+
+
   return (
     <div>
       <button
