@@ -26,6 +26,8 @@ This is a compontent that display error , spinner , success. its props are
   loadingComponent: ReactElement;
 ```
 
+You can use this generic component to cretae more specific component as done with FetchDataDefault
+
 <h3>Logic</h3>
 <h4>fetchDataEngine</h4>
 <p>This function fetch the data from the server and call setData, setError , setIsLoading accordingly</p>

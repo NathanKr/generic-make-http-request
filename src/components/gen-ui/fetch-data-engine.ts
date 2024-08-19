@@ -1,5 +1,5 @@
 // fetchData.js
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 import IValidationResult from "../../types/i-validation-results";
 import { MainErrors } from "../../types/main-errors";
 
@@ -14,7 +14,7 @@ export async function fetchDataEngine<DataType, QueryParamsType>(
   if (url) {
     try {
       setIsLoading(true);
-      const res: AxiosResponse = await axios.get(url, { params });
+      const res: AxiosResponse<DataType> = await axios.get(url, { params });
       setData(res.data);
 
       if (validate) {
@@ -22,10 +22,11 @@ export async function fetchDataEngine<DataType, QueryParamsType>(
         if (validationResult && !validationResult.valid) {
           setError(MainErrors.Validation);
           console.error(validationResult.ajvErrors);
+          return; // Return early if validation fails
         }
       }
-    } catch (err) {
-      if (err instanceof AxiosError) {
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
         setError(MainErrors.Ajax);
         console.error(err.response?.data || err.message);
       } else {

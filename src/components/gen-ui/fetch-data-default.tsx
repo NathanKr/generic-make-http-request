@@ -1,5 +1,6 @@
 import { IFetchBase } from "../../types/fetch-types";
 import { Alert, CircularProgress } from "@mui/material";
+import FetchDataGen from "./fetch-data-gen";
 
 // Declare UiFetchData as a generic component
 const FetchDataDefault = <DataType,>({
@@ -20,20 +21,16 @@ const FetchDataDefault = <DataType,>({
       <Alert severity="error">This is an error alert — check it out!</Alert>
     );
 
-  if (isLoading) {
-    return loadingComponent;
-  }
-
-  if (error) {
-    return errorComponent;
-  }
-
-  if (!data) {
-    // --- not ready
-    return <></>;
-  }
-
-  return successComponent;
+  return (
+    <FetchDataGen
+      successComponent={successComponent}
+      errorComponent={errorComponent}
+      loadingComponent={loadingComponent}
+      data={data}
+      error={error}
+      isLoading={isLoading}
+    />
+  );
 };
 
 export default FetchDataDefault;
