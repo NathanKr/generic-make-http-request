@@ -1,27 +1,31 @@
 import { Alert, CircularProgress } from "@mui/material";
 import { useState } from "react";
-import GenericFetchData from "./generic-fetch-data";
+import UiFetchData from "./fetch-utils/ui-fetch-data";
+import { getData } from "./fetch-utils/fetch-data";
+import { MainErrors } from "../types/main-errors";
 
-function Sample1() {
-  const [urlTodos, setUrlTodos] = useState("");
-  const [todos, setTodos] = useState<any[]>([]);
-
-  console.log('Sample1 rendered');
-  
+function SampleClickBased() {
+  const [todos, setTodos] = useState<any[] | null>(null);
+  const [error, setError] = useState<MainErrors | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <div>
       <button
-        onClick={() =>
-          setUrlTodos("https://jsonplaceholder.typicode.com/todos")
-        }
+        onClick={() => {
+          const url = "https://jsonplaceholder.typicode.com/todos",
+            params = null,
+            validate = null;
+          getData(url, params, validate, setTodos, setError, setIsLoading);
+        }}
       >
         Get jsonplaceholder todo num
       </button>
       {
-        <GenericFetchData
-          setData={(_todos: any[]) => setTodos(_todos)}
-          url={urlTodos}
+        <UiFetchData
+          data={todos}
+          error={error}
+          isLoading={isLoading}
           successComponent={
             <Alert severity="success">
               This is an auccess alert — check it out!
@@ -46,4 +50,4 @@ function Sample1() {
   );
 }
 
-export default Sample1;
+export default SampleClickBased;
