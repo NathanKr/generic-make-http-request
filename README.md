@@ -13,7 +13,21 @@ fetching data from the server is on button click or page load is a common task w
 <h2>Design</h2>
 The design is composed of logic and ui via few layers
 
-<h3>logic : fetchDataEngine</h3>
+<h3>UI</h3>
+<h4>FetchDataGen</h4>
+This is a compontent that display error , spinner , success. its props are
+
+```ts
+  data: DataType | null;
+  error: MainErrors | null;
+  isLoading: boolean;
+  successComponent: ReactElement;
+  errorComponent: ReactElement;
+  loadingComponent: ReactElement;
+```
+
+<h3>Logic</h3>
+<h4>fetchDataEngine</h4>
 <p>This function fetch the data from the server and call setData, setError , setIsLoading accordingly</p>
 <p>You need to call this function either on button click or page load via useEffect</p>
 
@@ -29,24 +43,14 @@ function fetchDataEngine<DataType, QueryParamsType>(
 ) 
 ```
 
-<h3>ui : FetchDataGen</h3>
-This is a compontent that display error , spinner , success. its props are
-
-```ts
-  data: DataType | null;
-  error: MainErrors | null;
-  isLoading: boolean;
-  successComponent: ReactElement;
-  errorComponent: ReactElement;
-  loadingComponent: ReactElement;
-```
 
 
-<h3>logic : useFetchState</h3>
+
+<h4>useFetchState</h4>
 this is a custom hook to avoid using few states and return IFetchState<DataType>
 
 
-<h3>Interfaces</h3>
+<h4>Interfaces</h4>
 
 ```ts
 
