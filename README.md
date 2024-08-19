@@ -1,5 +1,5 @@
 <h2>Motivation</h2>
-fetching data from the server is on button click or page load is a common task which involve :
+fetching data from the server on button click or page load is a common task which involve :
 <ul>
 <li>perform http request to the server using fetch \ axios</li>
 <li>showing spinner</li>
@@ -29,7 +29,7 @@ This is a compontent that display error , spinner , success. its props are
 <h3>Logic</h3>
 <h4>fetchDataEngine</h4>
 <p>This function fetch the data from the server and call setData, setError , setIsLoading accordingly</p>
-<p>You need to call this function either on button click or page load via useEffect</p>
+<p>You need to call this function either on button click handler or page load via useEffect</p>
 
 ```ts
 
@@ -47,8 +47,10 @@ function fetchDataEngine<DataType, QueryParamsType>(
 
 
 <h4>useFetchState</h4>
-this is a custom hook to avoid using few states and return IFetchState<DataType>
-
+<ul>
+<li>this is a custom hook to avoid using few states </li>
+<li>The custom hook return IFetchState<DataType></li>
+</ul>
 
 <h4>Interfaces</h4>
 
