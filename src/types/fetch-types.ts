@@ -15,9 +15,4 @@ export interface IFetchDataGenProps<DataType> {
   loadingComponent: ReactElement;
 }
 
-// export interface IFetchDataParams<DataType, QueryParamsType>
-//   extends IFetchState<DataType> {
-//   url: string;
-//   params: QueryParamsType | null;
-//   validate: ((data: DataType) => IValidationResult) | null;
-// }
+

@@ -18,9 +18,7 @@ The design is composed of logic and ui via few layers
 This is a compontent that display error , spinner , success. its props are
 
 ```ts
-  data: DataType | null;
-  error: MainErrors | null;
-  isLoading: boolean;
+  state : FetchState<DataType>;
   successComponent: ReactElement;
   errorComponent: ReactElement;
   loadingComponent: ReactElement;
@@ -39,48 +37,32 @@ function fetchDataEngine<DataType, QueryParamsType>(
   url: string,
   params: QueryParamsType | null,
   validate: ((data: DataType) => IValidationResult) | null,
-  setData: (data: DataType) => void,
-  setError: (error: MainErrors | null) => void,
-  setIsLoading: (isLoading: boolean) => void
+  dispatch: Dispatch<Action<DataType>>
 ) 
+
 ```
 
 
-
-
-<h4>useFetchState</h4>
-<ul>
-<li>this is a custom hook to avoid using few states </li>
-<li>The custom hook return IFetchState<DataType></li>
-</ul>
+<h4>fetchReducer + useReducer</h4>
+The state has four properties : data , error , isLoading and isCompleted so instead of
+using four properties and four set function i prefer to use reducer with one state. 
 
 <h4>Interfaces</h4>
 
 ```ts
 
- interface IFetchBase<DataType> {
+ export interface FetchState<DataType> {
   data: DataType | null;
   error: MainErrors | null;
   isLoading: boolean;
+  isCompleted: boolean;
 }
 
- interface IFetchState<DataType> extends IFetchBase<DataType> {
-  setData: (data: DataType | null) => void;
-  setError: (error: MainErrors | null) => void;
-  setIsLoading: (isLoading: boolean) => void;
-}
-
- interface IFetchDataGenProps<DataType> extends IFetchBase<DataType> {
+export interface IFetchDataGenProps<DataType> {
+  state: FetchState<DataType>;
   successComponent: ReactElement;
   errorComponent: ReactElement;
   loadingComponent: ReactElement;
-}
-
- interface IFetchDataParams<DataType, QueryParamsType>
-  extends IFetchState<DataType> {
-  url: string;
-  params: QueryParamsType | null;
-  validate: ((data: DataType) => IValidationResult) | null;
 }
 
 ```
@@ -88,15 +70,9 @@ function fetchDataEngine<DataType, QueryParamsType>(
 <h2>Usage</h2>
 
 ```ts
+
 function SampleClickBased() {
-  const {
-    data: todos,
-    error,
-    isLoading,
-    setData: setTodos,
-    setError,
-    setIsLoading,
-  } = useFetchState<Todo[]>();
+  const [state, dispatch] = useReducer(fetchReducer<Todo[]>, initialState);
 
   return (
     <div>
@@ -105,22 +81,18 @@ function SampleClickBased() {
           const url = "https://jsonplaceholder.typicode.com/todos",
             params = null,
             validate = null;
-          fetchDataEngine(
-            url,
-            params,
-            validate,
-            setTodos,
-            setError,
-            setIsLoading
-          );
+          fetchDataEngine(url, params, validate, dispatch);
         }}
       >
         Get jsonplaceholder todo num
       </button>
-      {<FetchDataDefault data={todos} error={error} isLoading={isLoading} />}
+      {<FetchDataDefault state={state} />}
 
-      {todos && <p>num todos : {todos ? todos.length : "..."}</p>}
+      {state.isCompleted && (
+        <p>num todos : {state.data ? state.data.length : "..."}</p>
+      )}
     </div>
   );
 }
+
 ```
