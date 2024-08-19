@@ -1,4 +1,4 @@
-import { fetchDataEngine } from "./gen-ui/fetch-data-engine";
+import { fetchDataEngine } from "../utils/fetch-data-engine";
 import useFetchState from "../hooks/use-fetch-state";
 import { Todo } from "../types/types";
 import FetchDataDefault from "./gen-ui/fetch-data-default";

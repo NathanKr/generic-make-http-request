@@ -1,6 +1,6 @@
 import { Alert, CircularProgress } from "@mui/material";
 import { useEffect } from "react";
-import { fetchDataEngine } from "./gen-ui/fetch-data-engine";
+import { fetchDataEngine } from "../utils/fetch-data-engine";
 import useFetchState from "../hooks/use-fetch-state";
 import { Todo } from "../types/types";
 import UiFetchDataGen from "./gen-ui/fetch-data-gen";

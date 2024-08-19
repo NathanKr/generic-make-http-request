@@ -1,7 +1,7 @@
 // fetchData.js
 import axios, { AxiosResponse } from "axios";
-import IValidationResult from "../../types/i-validation-results";
-import { MainErrors } from "../../types/main-errors";
+import IValidationResult from "../types/i-validation-results";
+import { MainErrors } from "../types/main-errors";
 
 export async function fetchDataEngine<DataType, QueryParamsType>(
   url: string,
