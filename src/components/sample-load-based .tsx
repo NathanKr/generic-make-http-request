@@ -1,33 +1,32 @@
 import { Alert, CircularProgress } from "@mui/material";
-import { useEffect } from "react";
+import { useEffect, useReducer } from "react";
 import { fetchDataEngine } from "../utils/fetch-data-engine";
-import useFetchState from "../hooks/use-fetch-state";
 import { Todo } from "../types/types";
 import UiFetchDataGen from "./gen-ui/fetch-data-gen";
+import { FetchState } from "../types/fetch-types";
+import { fetchReducer } from "../hooks/fetch-reducer";
+
+const initialState: FetchState<Todo[]> = {
+  data: null,
+  error: null,
+  isLoading: false,
+  isCompleted: false,
+};
 
 function SampleLoadBased() {
-  const {
-    data: todos,
-    error,
-    isLoading,
-    setData: setTodos,
-    setError,
-    setIsLoading,
-  } = useFetchState<Todo[]>();
+  const [state, dispatch] = useReducer(fetchReducer<Todo[]>, initialState);
 
   useEffect(() => {
     const url = "https://jsonplaceholder.typicode.com/todos",
       params = null,
       validate = null;
-    fetchDataEngine(url, params, validate, setTodos, setError, setIsLoading);
+    fetchDataEngine(url, params, validate, dispatch);
   }, []);
 
   return (
     <div>
       <UiFetchDataGen
-        data={todos}
-        error={error}
-        isLoading={isLoading}
+        state={state}
         successComponent={
           <Alert severity="success">
             This is an auccess alert — check it out!
@@ -43,7 +42,9 @@ function SampleLoadBased() {
           <Alert severity="error">This is an error alert — check it out!</Alert>
         }
       />
-      {todos && <p>num todos : {todos ? todos.length : "..."}</p>}
+      {state.isCompleted && (
+        <p>num todos : {state.data ? state.data.length : "..."}</p>
+      )}
     </div>
   );
 }

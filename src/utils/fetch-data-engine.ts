@@ -1,40 +1,39 @@
-// fetchData.js
 import axios, { AxiosResponse } from "axios";
 import IValidationResult from "../types/i-validation-results";
 import { MainErrors } from "../types/main-errors";
+import { Dispatch } from "react";
+import { Action } from "../hooks/fetch-reducer";
 
 export async function fetchDataEngine<DataType, QueryParamsType>(
   url: string,
   params: QueryParamsType | null,
   validate: ((data: DataType) => IValidationResult) | null,
-  setData: (data: DataType) => void,
-  setError: (error: MainErrors | null) => void,
-  setIsLoading: (isLoading: boolean) => void
+  dispatch: Dispatch<Action<DataType>>
 ) {
   if (url) {
     try {
-      setIsLoading(true);
+      dispatch({ type: "FETCH_START" });
       const res: AxiosResponse<DataType> = await axios.get(url, { params });
-      setData(res.data);
+      dispatch({ type: "FETCH_SUCCESS", payload: res.data });
 
       if (validate) {
         const validationResult = validate(res.data);
         if (validationResult && !validationResult.valid) {
-          setError(MainErrors.Validation);
+          dispatch({ type: "FETCH_ERROR", payload: MainErrors.Validation });
           console.error(validationResult.ajvErrors);
           return; // Return early if validation fails
         }
       }
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
-        setError(MainErrors.Ajax);
+        dispatch({ type: "FETCH_ERROR", payload: MainErrors.Ajax });
         console.error(err.response?.data || err.message);
       } else {
-        setError(MainErrors.Unknown);
+        dispatch({ type: "FETCH_ERROR", payload: MainErrors.Unknown });
         console.error("Unknown error:", err);
       }
     } finally {
-      setIsLoading(false);
+      dispatch({ type: "FETCH_COMPLETE" });
     }
   }
 }
