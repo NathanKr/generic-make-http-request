@@ -1,64 +1,118 @@
 <h2>Motivation</h2>
-<p>useFetchData is a custom hook that can fetch data via GET method and validate it. It return {data, isLoading, error}</p>
-<p>given isLoading we might want to show progress .Given error we might want to show error .So why not do a component for this ? - thats the purpose of this repository</p>
-
-<h2>Declerative design</h2>
-What is nice about this design is that it embrace the declerative concept , which is one of react foundations
-
-![Declerative](./figs/declerative.png)
-
-<h2>Design</h2>
-The design is composed of three layers
+fetching data from the server is on button click or page load is a common task which involve :
 <ul>
-<li>IFetchData<DataType, QueryParamsType> - typescript interface generic</li>
-<li>useFetchData<DataType, QueryParamsType> - custom hooks to fetch the data and validate it</li>
-<li>GenericFetchData<DataType, QueryParamsType>(props: IFetchData<DataType>) - generic component to show : error \ success \ loading and set data to parent callback function. This component is fetching data when its url argument is set to its correct value. It uses useMemo so will render only when its arguments changes</li>
+<li>perform http request to the server using fetch \ axios</li>
+<li>showing spinner</li>
+<li>showing error</li>
+<li>showing success</li>
+<li>showing the data we got from the server</li>
 </ul>
 
-<h2>IFetchData</h2>
+<p>This can happen in few pages and few applications so a generic solution can help and this is what this repository is all about</p>
+
+<h2>Design</h2>
+The design is composed of logic and ui via few layers
+
+<h3>logic : fetchDataEngine</h3>
+<p>This function fetch the data from the server and call setData, setError , setIsLoading accordingly</p>
+<p>You need to call this function either on button click or page load via useEffect</p>
 
 ```ts
-interface IFetchData<DataType, QueryParamsType> {
-  url: string;
-  params?: QueryParamsType;
-  validate?: (data: DataType) => IValidationResult;
-  setData: (data: DataType) => void;
+
+function fetchDataEngine<DataType, QueryParamsType>(
+  url: string,
+  params: QueryParamsType | null,
+  validate: ((data: DataType) => IValidationResult) | null,
+  setData: (data: DataType) => void,
+  setError: (error: MainErrors | null) => void,
+  setIsLoading: (isLoading: boolean) => void
+) 
+```
+
+<h3>ui : FetchDataGen</h3>
+This is a compontent that display error , spinner , success. its props are
+
+```ts
+  data: DataType | null;
+  error: MainErrors | null;
+  isLoading: boolean;
+  successComponent: ReactElement;
+  errorComponent: ReactElement;
+  loadingComponent: ReactElement;
+```
+
+
+<h3>logic : useFetchState</h3>
+this is a custom hook to avoid using few states and return IFetchState<DataType>
+
+
+<h3>Interfaces</h3>
+
+```ts
+
+ interface IFetchBase<DataType> {
+  data: DataType | null;
+  error: MainErrors | null;
+  isLoading: boolean;
+}
+
+ interface IFetchState<DataType> extends IFetchBase<DataType> {
+  setData: (data: DataType | null) => void;
+  setError: (error: MainErrors | null) => void;
+  setIsLoading: (isLoading: boolean) => void;
+}
+
+ interface IFetchDataGenProps<DataType> extends IFetchBase<DataType> {
   successComponent: ReactElement;
   errorComponent: ReactElement;
   loadingComponent: ReactElement;
 }
+
+ interface IFetchDataParams<DataType, QueryParamsType>
+  extends IFetchState<DataType> {
+  url: string;
+  params: QueryParamsType | null;
+  validate: ((data: DataType) => IValidationResult) | null;
+}
+
 ```
 
-<h2>using the generic fetch data component</h2>
+<h2>Usage</h2>
 
 ```ts
-<GenericFetchData
-  setData={(_todos: any[]) => setTodos(_todos)}
-  url={url}
-  // --- todo nath change null to validation if required
-  validate={null}
-  successComponent={
-    <Alert severity="success">This is an auccess alert — check it out!</Alert>
-  }
-  loadingComponent={
-    <>
-      Loading ...
-      <CircularProgress />
-    </>
-  }
-  errorComponent={
-    <Alert severity="error">This is an error alert — check it out!</Alert>
-  }
-/>
-```
+function SampleClickBased() {
+  const {
+    data: todos,
+    error,
+    isLoading,
+    setData: setTodos,
+    setError,
+    setIsLoading,
+  } = useFetchState<Todo[]>();
 
-<h2>Generic design</h2>
-this GenericFetchData component is generic in the sense that you can 
-<ul>
-<li>invoke it with any GET based url</li>
-<li>recive any data type</li>
-<li>invoke any validation on the data</li>
-<li>use any error component</li>
-<li>use any loading component</li>
-<li>use any success component</li>
-</ul>
+  return (
+    <div>
+      <button
+        onClick={() => {
+          const url = "https://jsonplaceholder.typicode.com/todos",
+            params = null,
+            validate = null;
+          fetchDataEngine(
+            url,
+            params,
+            validate,
+            setTodos,
+            setError,
+            setIsLoading
+          );
+        }}
+      >
+        Get jsonplaceholder todo num
+      </button>
+      {<FetchDataDefault data={todos} error={error} isLoading={isLoading} />}
+
+      {todos && <p>num todos : {todos ? todos.length : "..."}</p>}
+    </div>
+  );
+}
+```

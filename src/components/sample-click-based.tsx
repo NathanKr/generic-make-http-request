@@ -1,13 +1,17 @@
-import { Alert, CircularProgress } from "@mui/material";
-import { useState } from "react";
-import UiFetchData from "./fetch-utils/ui-fetch-data";
-import { getData } from "./fetch-utils/fetch-data";
-import { MainErrors } from "../types/main-errors";
+import { fetchDataEngine } from "./gen-ui/fetch-data-engine";
+import useFetchState from "../hooks/use-fetch-state";
+import { Todo } from "../types/types";
+import FetchDataDefault from "./gen-ui/fetch-data-default";
 
 function SampleClickBased() {
-  const [todos, setTodos] = useState<any[] | null>(null);
-  const [error, setError] = useState<MainErrors | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const {
+    data: todos,
+    error,
+    isLoading,
+    setData: setTodos,
+    setError,
+    setIsLoading,
+  } = useFetchState<Todo[]>();
 
   return (
     <div>
@@ -16,36 +20,21 @@ function SampleClickBased() {
           const url = "https://jsonplaceholder.typicode.com/todos",
             params = null,
             validate = null;
-          getData(url, params, validate, setTodos, setError, setIsLoading);
+          fetchDataEngine(
+            url,
+            params,
+            validate,
+            setTodos,
+            setError,
+            setIsLoading
+          );
         }}
       >
         Get jsonplaceholder todo num
       </button>
-      {
-        <UiFetchData
-          data={todos}
-          error={error}
-          isLoading={isLoading}
-          successComponent={
-            <Alert severity="success">
-              This is an auccess alert — check it out!
-            </Alert>
-          }
-          loadingComponent={
-            <>
-              Loading ...
-              <CircularProgress />
-            </>
-          }
-          errorComponent={
-            <Alert severity="error">
-              This is an error alert — check it out!
-            </Alert>
-          }
-        />
-      }
+      {<FetchDataDefault data={todos} error={error} isLoading={isLoading} />}
 
-      <p>num todos : {todos ? todos.length : "..."}</p>
+      {todos && <p>num todos : {todos ? todos.length : "..."}</p>}
     </div>
   );
 }

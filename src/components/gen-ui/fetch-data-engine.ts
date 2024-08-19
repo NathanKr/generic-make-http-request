@@ -3,7 +3,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import IValidationResult from "../../types/i-validation-results";
 import { MainErrors } from "../../types/main-errors";
 
-export async function getData<DataType, QueryParamsType>(
+export async function fetchDataEngine<DataType, QueryParamsType>(
   url: string,
   params: QueryParamsType | null,
   validate: ((data: DataType) => IValidationResult) | null,
@@ -16,7 +16,6 @@ export async function getData<DataType, QueryParamsType>(
       setIsLoading(true);
       const res: AxiosResponse = await axios.get(url, { params });
       setData(res.data);
-      setIsLoading(false);
 
       if (validate) {
         const validationResult = validate(res.data);
@@ -33,6 +32,7 @@ export async function getData<DataType, QueryParamsType>(
         setError(MainErrors.Unknown);
         console.error("Unknown error:", err);
       }
+    } finally {
       setIsLoading(false);
     }
   }
