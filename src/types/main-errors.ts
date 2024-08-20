@@ -1,5 +1,6 @@
 export enum MainErrors{
     Validation = "Validation",
     Ajax = 'Ajax',
-    Unknown = 'Unknown'
+    Unknown = 'Unknown',
+    InvalidUrl = 'InvalidUrl'
   }

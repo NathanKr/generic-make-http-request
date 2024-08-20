@@ -1,37 +1,35 @@
-import { useReducer } from "react";
-import { fetchDataEngine } from "../utils/fetch-data-engine";
+import { useReducer, useState } from "react";
+import { fetchDataEngine } from "../logic/fetch-data-engine";
 import FetchDataDefault from "./gen-ui/fetch-data-default";
-import { fetchReducer } from "../hooks/fetch-reducer";
-import { FetchState } from "../types/fetch-types";
+import { fetchReducer, initialState } from "../hooks/fetch-reducer";
 import { Todo } from "../types/types";
 
-const initialState: FetchState<Todo[]> = {
-  data: null,
-  error: null,
-  isLoading: false,
-  isCompleted: false,
-};
 
 function SampleClickBased() {
-  const [state, dispatch] = useReducer(fetchReducer<Todo[]>, initialState);
+  const [state, dispatch] = useReducer(fetchReducer, initialState);
+  const [todos, setTodos] = useState<Todo[] | null>(null);
 
   return (
     <div>
       <button
-        onClick={() => {
+        onClick={async () => {
           const url = "https://jsonplaceholder.typicode.com/todos",
             params = null,
             validate = null;
-          fetchDataEngine(url, params, validate, dispatch);
+          const responseData = await fetchDataEngine<Todo[], null>(
+            url,
+            params,
+            validate,
+            dispatch
+          );
+          setTodos(responseData);
         }}
       >
         Get jsonplaceholder todo num
       </button>
       {<FetchDataDefault state={state} />}
 
-      {state.isCompleted && (
-        <p>num todos : {state.data ? state.data.length : "..."}</p>
-      )}
+      {state.isCompleted && <p>num todos : {todos ? todos.length : "..."}</p>}
     </div>
   );
 }

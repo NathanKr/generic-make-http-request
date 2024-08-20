@@ -1,13 +1,14 @@
 import { Alert, CircularProgress } from "@mui/material";
 import FetchDataGen from "./fetch-data-gen";
 import { FetchState } from "../../types/fetch-types";
+import { FC } from "react";
 
-export interface IProps<DataType> {
-  state: FetchState<DataType>;
+export interface IProps {
+  state: FetchState;
 }
 
 // Declare UiFetchData as a generic component
-const FetchDataDefault = <DataType,>({ state }: IProps<DataType>) => {
+const FetchDataDefault: FC<IProps> = ({ state }) => {
   const successComponent = (
       <Alert severity="success">This is an auccess alert — check it out!</Alert>
     ),

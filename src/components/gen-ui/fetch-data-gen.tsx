@@ -1,12 +1,13 @@
-import { FetchState, IFetchDataGenProps } from "../../types/fetch-types";
+import { FC } from "react";
+import { IFetchDataGenProps } from "../../types/fetch-types";
 
 // Declare UiFetchData as a generic component
-const FetchDataGen = <DataType,>({
+const FetchDataGen: FC<IFetchDataGenProps> = ({
   state,
   successComponent,
   loadingComponent,
   errorComponent,
-}: IFetchDataGenProps<DataType>) => {
+}) => {
   if (state.isLoading) {
     return loadingComponent;
   }

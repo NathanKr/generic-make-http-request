@@ -1,27 +1,30 @@
 import { Alert, CircularProgress } from "@mui/material";
-import { useEffect, useReducer } from "react";
-import { fetchDataEngine } from "../utils/fetch-data-engine";
-import { Todo } from "../types/types";
+import { useEffect, useReducer, useState } from "react";
+import { fetchDataEngine } from "../logic/fetch-data-engine";
 import UiFetchDataGen from "./gen-ui/fetch-data-gen";
-import { FetchState } from "../types/fetch-types";
-import { fetchReducer } from "../hooks/fetch-reducer";
-
-const initialState: FetchState<Todo[]> = {
-  data: null,
-  error: null,
-  isLoading: false,
-  isCompleted: false,
-};
+import { fetchReducer, initialState } from "../hooks/fetch-reducer";
+import { Todo } from "../types/types";
 
 function SampleLoadBased() {
-  const [state, dispatch] = useReducer(fetchReducer<Todo[]>, initialState);
+  const [state, dispatch] = useReducer(fetchReducer, initialState);
+  const [todos, setTodos] = useState<Todo[] | null>(null);
 
   useEffect(() => {
+    getTodos();
+  }, []);
+
+  async function getTodos(): Promise<void> {
     const url = "https://jsonplaceholder.typicode.com/todos",
       params = null,
       validate = null;
-    fetchDataEngine(url, params, validate, dispatch);
-  }, []);
+    const responseData = await fetchDataEngine<Todo[], null>(
+      url,
+      params,
+      validate,
+      dispatch
+    );
+    setTodos(responseData);
+  }
 
   return (
     <div>
@@ -43,7 +46,7 @@ function SampleLoadBased() {
         }
       />
       {state.isCompleted && (
-        <p>num todos : {state.data ? state.data.length : "..."}</p>
+        <p>num todos : {todos ? todos.length : "..."}</p>
       )}
     </div>
   );

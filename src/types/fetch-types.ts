@@ -1,15 +1,14 @@
 import { ReactElement } from "react";
 import { MainErrors } from "./main-errors";
 
-export interface FetchState<DataType> {
-  data: DataType | null;
-  error: MainErrors | null;
+export interface FetchState {
+  error: MainErrors | null; // --- not error and completed means success
   isLoading: boolean;
   isCompleted: boolean;
 }
 
-export interface IFetchDataGenProps<DataType> {
-  state: FetchState<DataType>;
+export interface IFetchDataGenProps {
+  state: FetchState;
   successComponent: ReactElement;
   errorComponent: ReactElement;
   loadingComponent: ReactElement;
