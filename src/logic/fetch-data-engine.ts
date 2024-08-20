@@ -4,7 +4,7 @@ import { MainErrors } from "../types/main-errors";
 import { Dispatch } from "react";
 import { Action } from "../hooks/fetch-reducer";
 
-export async function fetchDataEngine<ResponseDataType, QueryParamsType>(
+export async function fetchDataEngine<ResponseDataType, QueryParamsType = null>(
   url: string,
   params: QueryParamsType | null,
   validate: ((data: ResponseDataType) => IValidationResult) | null,

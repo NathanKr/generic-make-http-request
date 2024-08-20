@@ -32,7 +32,7 @@ You can use this generic component to create more specific component as done wit
 
 ```ts
 
-fetchDataEngine<ResponseDataType, QueryParamsType>(
+async function fetchDataEngine<ResponseDataType, QueryParamsType = null>(
   url: string,
   params: QueryParamsType | null,
   validate: ((data: ResponseDataType) => IValidationResult) | null,
@@ -80,7 +80,7 @@ function SampleClickBased() {
           const url = "https://jsonplaceholder.typicode.com/todos",
             params = null,
             validate = null;
-          const responseData = await fetchDataEngine<Todo[], null>(
+          const responseData = await fetchDataEngine<Todo[]>(
             url,params,validate,dispatch
           );
           setTodos(responseData);

@@ -16,7 +16,7 @@ function SampleClickBased() {
           const url = "https://jsonplaceholder.typicode.com/todos",
             params = null,
             validate = null;
-          const responseData = await fetchDataEngine<Todo[], null>(
+          const responseData = await fetchDataEngine<Todo[]>(
             url,
             params,
             validate,
