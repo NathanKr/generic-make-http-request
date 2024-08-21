@@ -1,9 +1,8 @@
 import { useReducer, useState } from "react";
-import { fetchDataEngine } from "../logic/fetch-data-engine";
 import FetchDataDefault from "./gen-ui/fetch-data-default";
 import { fetchReducer, initialState } from "../hooks/fetch-reducer";
-import { Todo } from "../types/types";
-
+import { HttpMethod, Todo } from "../types/types";
+import { makeHttpRequest } from "../logic/make-http-request-engine";
 
 function SampleClickBased() {
   const [state, dispatch] = useReducer(fetchReducer, initialState);
@@ -13,13 +12,10 @@ function SampleClickBased() {
     <div>
       <button
         onClick={async () => {
-          const url = "https://jsonplaceholder.typicode.com/todos",
-            params = null,
-            validate = null;
-          const responseData = await fetchDataEngine<Todo[]>(
+          const url = "https://jsonplaceholder.typicode.com/todos";
+          const responseData = await makeHttpRequest<Todo[]>(
+            HttpMethod.GET,
             url,
-            params,
-            validate,
             dispatch
           );
           setTodos(responseData);

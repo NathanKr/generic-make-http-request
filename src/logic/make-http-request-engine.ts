@@ -3,12 +3,19 @@ import IValidationResult from "../types/i-validation-results";
 import { MainErrors } from "../types/main-errors";
 import { Dispatch } from "react";
 import { Action } from "../hooks/fetch-reducer";
+import { HttpMethod } from "../types/types";
 
-export async function fetchDataEngine<ResponseDataType, QueryParamsType = null>(
+export async function makeHttpRequest<
+  ResponseDataType,
+  QueryParamsType = null,
+  BodyDataType = null
+>(
+  method: HttpMethod,
   url: string,
-  params: QueryParamsType | null,
-  validate: ((data: ResponseDataType) => IValidationResult) | null,
-  dispatch: Dispatch<Action>
+  dispatch: Dispatch<Action>,
+  params?: QueryParamsType,
+  body?: BodyDataType,
+  validate?: (data: ResponseDataType) => IValidationResult
 ): Promise<ResponseDataType | null> {
   if (!url) {
     console.error("URL is required");
@@ -18,8 +25,12 @@ export async function fetchDataEngine<ResponseDataType, QueryParamsType = null>(
 
   try {
     dispatch({ type: "FETCH_START" });
-    const res: AxiosResponse<ResponseDataType> = await axios.get(url, {
-      params,
+
+    const res: AxiosResponse<ResponseDataType> = await axios({
+      method: method,
+      url: url,
+      params, // Query string parameters
+      data: body, // Request body
     });
 
     if (validate) {

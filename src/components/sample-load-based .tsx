@@ -1,9 +1,9 @@
 import { Alert, CircularProgress } from "@mui/material";
 import { useEffect, useReducer, useState } from "react";
-import { fetchDataEngine } from "../logic/fetch-data-engine";
 import UiFetchDataGen from "./gen-ui/fetch-data-gen";
 import { fetchReducer, initialState } from "../hooks/fetch-reducer";
-import { Todo } from "../types/types";
+import { HttpMethod, Todo } from "../types/types";
+import { makeHttpRequest } from "../logic/make-http-request-engine";
 
 function SampleLoadBased() {
   const [state, dispatch] = useReducer(fetchReducer, initialState);
@@ -14,13 +14,10 @@ function SampleLoadBased() {
   }, []);
 
   async function getTodos(): Promise<void> {
-    const url = "https://jsonplaceholder.typicode.com/todos",
-      params = null,
-      validate = null;
-    const responseData = await fetchDataEngine<Todo[]>(
+    const url = "https://jsonplaceholder.typicode.com/todos";
+    const responseData = await makeHttpRequest<Todo[]>(
+      HttpMethod.GET,
       url,
-      params,
-      validate,
       dispatch
     );
     setTodos(responseData);
@@ -45,9 +42,7 @@ function SampleLoadBased() {
           <Alert severity="error">This is an error alert — check it out!</Alert>
         }
       />
-      {state.isCompleted && (
-        <p>num todos : {todos ? todos.length : "..."}</p>
-      )}
+      {state.isCompleted && <p>num todos : {todos ? todos.length : "..."}</p>}
     </div>
   );
 }

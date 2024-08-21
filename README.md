@@ -1,7 +1,7 @@
 <h2>Motivation</h2>
-fetching data from the server on button click or page load is a common task which involve :
+making http request to the server on button click or page load is a common task which involve :
 <ul>
-<li>perform http request to the server using fetch \ axios to get the response data</li>
+<li>perform http request to the server using fetch \ axios </li>
 <li>showing spinner</li>
 <li>showing error</li>
 <li>showing success</li>
@@ -26,18 +26,24 @@ This is a compontent that display error , spinner , success. its props are
 You can use this generic component to create more specific component as done with FetchDataDefault
 
 <h3>Logic</h3>
-<h4>fetchDataEngine</h4>
+<h4>makeHttpRequest</h4>
 <p>This function fetch the data from the server and fill the FetchState</p>
 <p>You need to call this function either on button click handler or page load via useEffect</p>
 
 ```ts
 
-async function fetchDataEngine<ResponseDataType, QueryParamsType = null>(
+export async function makeHttpRequest<
+  ResponseDataType,
+  QueryParamsType = null,
+  BodyDataType = null
+>(
+  method: HttpMethod,
   url: string,
-  params: QueryParamsType | null,
-  validate: ((data: ResponseDataType) => IValidationResult) | null,
-  dispatch: Dispatch<Action>
-): Promise<ResponseDataType | null> 
+  dispatch: Dispatch<Action>,
+  params?: QueryParamsType,
+  body?: BodyDataType,
+  validate?: (data: ResponseDataType) => IValidationResult
+): Promise<ResponseDataType | null>
 
 ```
 
@@ -77,11 +83,11 @@ function SampleClickBased() {
     <div>
       <button
         onClick={async () => {
-          const url = "https://jsonplaceholder.typicode.com/todos",
-            params = null,
-            validate = null;
-          const responseData = await fetchDataEngine<Todo[]>(
-            url,params,validate,dispatch
+          const url = "https://jsonplaceholder.typicode.com/todos";
+          const responseData = await makeHttpRequest<Todo[]>(
+            HttpMethod.GET,
+            url,
+            dispatch
           );
           setTodos(responseData);
         }}
